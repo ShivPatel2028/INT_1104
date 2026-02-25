@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Form</title>
+</head>
+<body>
+
+<fieldset>
+    <legend>User Registration Form</legend>
+
+    <form action="submit_registration.html" method="get">
+
+    <div>
+        <label>Full Name:</label><br>
+        <input type="text" name="fullname" required>
+    </div><br>
+
+    <div>
+        <label>About Yourself:</label><br>
+        <textarea name="about" rows="5" cols="50" required></textarea>
+    </div><br>
+
+    <div>
+        <label>Email Address:</label><br>
+        <input type="email" name="email" required>
+    </div><br>
+
+    <div>
+        <label>Password:</label><br>
+        <input type="password" name="password" required minlength="6">
+    </div><br>
+
+    <div>
+        <label>Phone Number:</label><br>
+        <input type="tel" name="phone" required>
+    </div><br>
+
+    <div>
+        <label>Website:</label><br>
+        <input type="url" name="website">
+    </div><br>
+
+    <div>
+        <label>Skills:</label><br>
+        <input type="checkbox" name="skill" value="HTML" required> HTML <br>
+        <input type="checkbox" name="skill" value="CSS"> CSS <br>
+        <input type="checkbox" name="skill" value="JavaScript"> JavaScript
+    </div><br>
+
+    <div>
+        <label>Gender:</label><br>
+        <input type="radio" name="gender" value="male" required> Male<br>
+        <input type="radio" name="gender" value="female"> Female
+    </div><br>
+
+    <div>
+        <label>Preferred Colour:</label><br>
+        <input type="color" name="preferred_colour" required>
+    </div><br>
+
+    <div>
+        <label>Experience Level:</label><br>
+        <select name="experience" required>
+            <option value="">Select Experience</option>
+            <option value="0">0</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+        </select>
+    </div><br>
+
+    <div>
+        <label>Date of Birth (Not after 31-12-2005):</label><br>
+        <input type="date" name="dob" max="2005-12-31" required>
+    </div><br>
+
+    <div>
+        <label>Available Time (9:00 AM to 6:30 PM):</label><br>
+        <input type="time" name="available_time" min="09:00" max="18:30" required>
+    </div><br>
+
+    <div>
+        <label>Joining Date:</label><br>
+        <input type="date" name="joining_date" value="2026-01-09" required>
+    </div><br>
+
+    <div>
+        <label>Training Week:</label><br>
+        <input type="number" name="training_week" value="7" readonly>
+    </div><br>
+
+    <div>
+        <label>Interview Slot:</label><br>
+        <select name="interview_slot" required>
+            <option value="">Select Slot</option>
+            <option>9:00 AM - 10:00 AM</option>
+            <option>10:00 AM - 11:00 AM</option>
+            <option>11:30 AM - 12:30 PM</option>
+            <option>2:00 PM - 3:00 PM</option>
+            <option>4:00 PM - 5:00 PM</option>
+        </select>
+    </div><br>
+
+    <div>
+        <label>Technology:</label><br>
+        <input type="radio" name="technology" value=".Net" required> .Net <br>
+        <input type="radio" name="technology" value="Angular"> Angular <br>
+        <input type="radio" name="technology" value="Java"> Java <br>
+        <input type="radio" name="technology" value="ReactJS"> ReactJS <br>
+        <input type="radio" name="technology" value="QA"> QA
+    </div><br>
+
+    <div>
+        <label>Upload Resume (PDF only):</label><br>
+        <input type="file" name="resume" accept=".pdf" required>
+    </div><br>
+
+    <input type="hidden" name="user_id" value="1001">
+
+    <div>
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+        <input type="button" value="Button">
+    </div>
+
+    </form>
+
+
+</fieldset>
+
+</body>
+</html>
