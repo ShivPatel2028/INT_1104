@@ -485,3 +485,698 @@ SELECT  top (10)
 ORDER BY price DESC
 
 
+--Q46. Find the total number of customers registered on the platform.
+
+SELECT COUNT (customer_id)
+FROM customers
+
+--Q47. Calculate the total revenue generated from all payments with payment_status = 'Success'.
+
+SELECT SUM(amount)
+FROM payments
+WHERE payment_status = 'Success';
+
+--Q48. Find the average price of all products.
+
+SELECT AVG(price)
+FROM products;
+
+--Q49. Display the highest and lowest product prices.
+
+SELECT MAX(price) AS highest_price, MIN(price) AS lowest_price
+FROM products;
+
+
+--Q50. Count the total number of orders with order_status = 'Delivered'.
+
+SELECT COUNT(order_id)
+FROM orders
+WHERE order_status = 'Delivered';
+
+--Q51. Calculate the total quantity of all products in stock (sum of stock_quantity).
+
+SELECT SUM(stock_quantity)
+FROM products;
+
+--Q52. Find the average discount applied across all order_items.
+
+SELECT AVG(discount)
+FROM order_items;
+
+--Q53. Display the total amount paid through 'UPI' payment method.
+
+SELECT SUM(amount)
+FROM payments
+WHERE payment_method = 'UPI';
+
+--Q54. Count the number of distinct cities from the customers table.
+
+SELECT COUNT(DISTINCT city)
+FROM customers;
+
+--Q55. Find the maximum quantity ordered in a single order_item.
+
+SELECT MAX(quantity)
+FROM order_items;
+
+
+--Q56. Count the total number of customers per city. Display city and customer_count.
+
+SELECT city, COUNT(customer_id) AS customer_count
+FROM customers
+GROUP BY city
+
+--Q57. Find the total number of orders placed by each customer. Display customer_id and order_count.
+
+SELECT customer_id, COUNT(order_id) AS order_count
+FROM orders
+GROUP BY customer_id
+
+--Q58. Calculate the total revenue per payment_method. Display payment_method and total_revenue.
+
+SELECT payment_method, SUM(amount) AS total_revenue
+FROM payments
+WHERE payment_status = 'Success'
+GROUP BY payment_method
+
+--Q59. Count the number of products in each category. Display category_id and product_count.
+
+SELECT category_id, COUNT(product_id) AS product_count
+FROM products
+GROUP BY category_id
+
+--Q60. Find the total quantity sold per product. Display product_id and total_quantity_sold.
+
+SELECT product_id, SUM(quantity) AS total_quantity_sold
+FROM order_items
+GROUP BY product_id
+
+--Q61. Calculate the average price of products per brand. Display brand and avg_price.
+
+SELECT brand, AVG(price) AS avg_price
+FROM products
+GROUP BY brand
+
+--Q62. Count the number of orders per order_status. Display order_status and order_count.
+
+SELECT order_status, COUNT(order_id) AS order_count
+FROM orders
+GROUP BY order_status
+
+--Q63. Find the total amount paid per customer. Display customer_id and total_paid. Join orders and payments.
+
+SELECT o.customer_id, SUM(p.amount) AS total_paid
+FROM orders o
+JOIN payments p ON o.order_id = p.order_id
+WHERE p.payment_status = 'Success'
+GROUP BY o.customer_id
+
+--Q64. Display the number of order_items per order. Display order_id and item_count.
+
+SELECT order_id, COUNT(item_id) AS item_count
+FROM order_items
+GROUP BY order_id
+
+--Q65. Calculate the average rating per category. Display category_id and avg_rating. Join products and categories.
+
+SELECT c.category_id, AVG(p.rating) AS avg_rating
+FROM products p
+JOIN categories c ON p.category_id = c.category_id
+WHERE p.rating IS NOT NULL
+GROUP BY c.category_id
+
+
+--Q66. Find all customers who have placed more than 3 orders. Display customer_id and order_count.
+
+SELECT customer_id, COUNT(order_id) AS order_count
+FROM orders
+GROUP BY customer_id
+HAVING COUNT(order_id) > 3
+
+--Q67. List all products that have been ordered more than 10 times. Display product_id and order_count.
+
+SELECT product_id, SUM(quantity) AS order_count
+FROM order_items
+GROUP BY product_id
+HAVING SUM(quantity) > 10
+
+--Q68. Find all categories with more than 5 products. Display category_id and product_count.
+
+SELECT category_id, COUNT(product_id) AS product_count
+FROM products
+GROUP BY category_id
+HAVING COUNT(product_id) > 5
+
+--Q69. Display all brands where the average product price is greater than 5000. Display brand and avg_price.
+
+SELECT brand, AVG(price) AS avg_price
+FROM products
+GROUP BY brand
+HAVING AVG(price) > 5000
+
+--Q70. Find all cities with more than 2 customers. Display city and customer_count.
+
+SELECT city, COUNT(customer_id) AS customer_count
+FROM customers
+GROUP BY city
+HAVING COUNT(customer_id) > 2
+
+
+--Q71. List all orders with customer full_name. Display order_id, full_name, order_date, and order_status.
+
+SELECT o.order_id, c.full_name, o.order_date, o.order_status
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+
+--Q72. Display all order_items with product_name and brand. Show item_id, product_name, brand, quantity, and unit_price.
+
+SELECT oi.item_id, p.product_name, p.brand, oi.quantity, oi.unit_price
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+
+--Q73. List all products with their category_name. Display product_name, category_name, price, and stock_quantity.
+
+SELECT p.product_name, c.category_name, p.price, p.stock_quantity
+FROM products p
+JOIN categories c ON p.category_id = c.category_id
+
+--Q74. Show all payments with customer full_name and order_date. Join payments, orders, and customers.
+
+SELECT p.payment_id, c.full_name, o.order_date, p.amount, p.payment_method, p.payment_status
+FROM payments p
+JOIN orders o ON p.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+
+--Q75. Display all orders along with the total amount paid. Join orders and payments. Show order_id, customer_id, order_status, and amount.
+
+SELECT o.order_id, o.customer_id, o.order_status, SUM(p.amount) AS total_amount
+FROM orders o
+JOIN payments p ON o.order_id = p.order_id
+WHERE p.payment_status = 'Success'
+GROUP BY o.order_id, o.customer_id, o.order_status
+
+--Q76. List all products that have been ordered at least once. Display product_name, brand, and total quantity ordered.
+
+SELECT p.product_name, p.brand, SUM(oi.quantity) AS total_quantity_ordered
+FROM products p
+JOIN order_items oi ON p.product_id = oi.product_id
+GROUP BY p.product_name, p.brand
+
+--Q77. Find all customers who have placed orders. Display full_name, email, and count of orders.
+
+SELECT c.full_name, c.email, COUNT(o.order_id) AS order_count
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.full_name, c.email
+
+
+--Q78. Show complete order details: customer full_name, product_name, quantity, unit_price, and order_status. Join all relevant tables.
+
+SELECT c.full_name, p.product_name, oi.quantity, oi.unit_price, o.order_status
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+JOIN orders o ON oi.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+
+--Q79. Display all categories along with the count of products in each category. Include categories with zero products.
+
+SELECT c.category_name, COUNT(p.product_id) AS product_count
+FROM categories c
+LEFT JOIN products p ON c.category_id = p.category_id
+GROUP BY c.category_name
+
+--Q80. Find all customers who have NEVER placed any order. Use LEFT JOIN.
+
+SELECT c.full_name, c.email
+FROM customers c
+LEFT JOIN orders o ON c.customer_id = o.customer_id
+WHERE o.order_id IS NULL
+
+--Q81. List all products that have NEVER been ordered. Use LEFT JOIN between products and order_items.
+
+SELECT p.product_name, p.brand
+FROM products p
+LEFT JOIN order_items oi ON p.product_id = oi.product_id
+WHERE oi.item_id IS NULL
+
+--Q82. Display all orders along with payment_status. Include orders that have no payment record (show NULL for payment_status).
+
+SELECT o.order_id, o.customer_id, o.order_status, p.payment_status
+FROM orders o
+LEFT JOIN payments p ON o.order_id = p.order_id
+
+--Q83. Find all categories with their parent category name (for sub-categories). Use SELF JOIN on categories table.
+
+SELECT c1.category_name AS SubCategory, c2.category_name AS ParentCategory
+FROM categories c1
+LEFT JOIN categories c2 ON c1.parent_category_id = c2.category_id
+WHERE c1.parent_category_id IS NOT NULL
+
+--Q84. List all pairs of customers from the same city. Use SELF JOIN on customers. Display both customer names and city.
+
+SELECT c1.full_name AS Customer1, c2.full_name AS Customer2, c1.city
+FROM customers c1
+JOIN customers c2 ON c1.city = c2.city AND c1.customer_id < c2.customer_id
+
+--Q85. Find all pairs of products with the same brand. Use SELF JOIN on products. Display both product names and brand.
+
+SELECT p1.product_name AS Product1, p2.product_name AS Product2, p1.brand
+FROM products p1
+JOIN products p2 ON p1.brand = p2.brand AND p1.product_id < p2.product_id
+
+
+--Q86. Display all customers along with their total spending. Join customers, orders, and payments. Show full_name and total_spent.
+
+SELECT c.full_name, SUM(p.amount) AS total_spent
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN payments p ON o.order_id = p.order_id
+WHERE p.payment_status = 'Success'
+GROUP BY c.full_name
+
+--Q87. List all products ordered in 'Mumbai'. Join products, order_items, orders, and customers. Filter by city = 'Mumbai'.
+
+SELECT DISTINCT p.product_name, p.brand
+FROM products p
+JOIN order_items oi ON p.product_id = oi.product_id
+JOIN orders o ON oi.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+WHERE c.city = 'Mumbai'
+
+--Q88. Show the top 5 best-selling products by total quantity sold. Join products and order_items.
+
+SELECT TOP (5) p.product_name, p.brand, SUM(oi.quantity) AS total_quantity_sold
+FROM products p
+JOIN order_items oi ON p.product_id = oi.product_id
+GROUP BY p.product_name, p.brand
+ORDER BY total_quantity_sold DESC
+
+--Q89. Find the most expensive order (by total amount). Join orders, order_items, and products. Calculate total as sum(quantity * unit_price).
+
+SELECT TOP (1) o.order_id, SUM(oi.quantity * oi.unit_price) AS total_amount
+FROM orders o
+JOIN order_items oi ON o.order_id = oi.order_id
+GROUP BY o.order_id
+ORDER BY total_amount DESC
+
+--Q90. Display all orders where payment_method is 'UPI'. Join orders and payments.
+
+SELECT o.order_id, o.customer_id, o.order_status, p.payment_method
+FROM orders o
+JOIN payments p ON o.order_id = p.order_id
+WHERE p.payment_method = 'UPI'
+
+--Q91. List all categories along with the total revenue generated from products in that category. Join categories, products, order_items.
+
+SELECT c.category_name, SUM(oi.quantity * oi.unit_price) AS total_revenue
+FROM categories c
+JOIN products p ON c.category_id = p.category_id
+JOIN order_items oi ON p.product_id = oi.product_id
+GROUP BY c.category_name
+
+--Q92. Find all customers who ordered products from the 'Electronics' category. Join customers, orders, order_items, products, categories.
+
+SELECT DISTINCT c.full_name, c.email
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN products p ON oi.product_id = p.product_id
+JOIN categories cat ON p.category_id = cat.category_id
+WHERE cat.category_name = 'Electronics'
+
+--Q93. Display the average order value per customer. Join customers, orders, order_items. Calculate avg(quantity * unit_price).
+
+SELECT c.full_name, AVG(oi.quantity * oi.unit_price) AS avg_order_value
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+GROUP BY c.full_name
+
+--Q94. Perform a CROSS JOIN between categories and payment_methods (use a derived table with UPI, Card, NetBanking, COD, Wallet).
+
+SELECT c.category_name, pm.payment_method
+FROM categories c
+CROSS JOIN (SELECT DISTINCT payment_method FROM payments) pm
+	
+--Q95. Write a FULL OUTER JOIN between customers and orders to show all customers (with or without orders) and all orders.
+
+SELECT c.full_name, o.order_id, o.order_status
+FROM customers c
+FULL OUTER JOIN orders o ON c.customer_id = o.customer_id
+
+--Q96. Find all products whose price is greater than the average price of all products. Use a subquery.
+
+SELECT product_name, price
+FROM products
+WHERE price > (SELECT AVG(price) FROM products)
+
+--Q97. List all customers who have placed more orders than the average number of orders per customer. Use a subquery.
+
+SELECT full_name, email
+FROM customers
+WHERE (SELECT COUNT(order_id) FROM orders WHERE orders.customer_id = customers.customer_id) > 
+	  (SELECT AVG(order_count) FROM (SELECT customer_id, COUNT(order_id) AS order_count FROM orders GROUP BY customer_id) AS subquery)
+	  
+--Q98. Display all orders where the total order value (sum of quantity * unit_price) is greater than 10000. Use a subquery in WHERE clause.
+
+SELECT order_id, customer_id, order_status
+FROM orders
+WHERE order_id IN (
+	SELECT oi.order_id
+	FROM order_items oi
+	GROUP BY oi.order_id
+	HAVING SUM(oi.quantity * oi.unit_price) > 10000
+)
+
+--Q99. Find the product with the highest price in each category. Use a correlated subquery.
+
+SELECT p1.product_name, p1.price, c.category_name
+FROM products p1
+JOIN categories c ON p1.category_id = c.category_id
+WHERE p1.price = (
+	SELECT MAX(p2.price)
+	FROM products p2
+	WHERE p2.category_id = p1.category_id
+)
+
+
+--Q100. List all customers who have made at least one payment with amount greater than 5000. Use EXISTS with a subquery.
+
+SELECT full_name, email
+FROM customers c
+WHERE EXISTS (
+	SELECT 1
+	FROM orders o
+	JOIN payments p ON o.order_id = p.order_id
+	WHERE o.customer_id = c.customer_id
+	  AND p.amount > 5000
+)
+
+--Q101. Create an index named 'idx_email' on the email column of the customers table.
+
+CREATE INDEX idx_email ON customers(email);
+
+--Q102. Create a composite index named 'idx_order_customer' on order_id and customer_id columns of the orders table.
+
+CREATE INDEX idx_order_customer ON orders(order_id, customer_id);
+
+--Q103. Create an index named 'idx_product_name' on the product_name column of the products table.
+
+CREATE INDEX idx_product_name ON products(product_name);
+--Q104. Drop the index named 'idx_email' from the customers table.
+
+DROP INDEX idx_email ON customers;
+--Q105. Show all indexes on the products table. Use SHOW INDEX command.
+
+SHOW INDEX FROM products;
+
+--Q106. Create a view named 'customer_orders_view' that shows customer_id, full_name, order_id, order_date, and order_status.
+
+CREATE VIEW customer_orders_view AS
+SELECT c.customer_id, c.full_name, o.order_id, o.order_date, o.order_status
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id;
+
+--Q107. Create a view named 'product_sales_view' that displays product_id, product_name, category_name, and total_quantity_sold.
+
+CREATE VIEW product_sales_view AS
+SELECT p.product_id, p.product_name, c.category_name, SUM(oi.quantity) AS total_quantity_sold
+FROM products p
+JOIN categories c ON p.category_id = c.category_id
+JOIN order_items oi ON p.product_id = oi.product_id
+GROUP BY p.product_id, p.product_name, c.category_name;
+
+--Q108. Create a view named 'revenue_by_category' that shows category_name and total revenue generated from each category.
+
+CREATE VIEW revenue_by_category AS
+SELECT 
+    c.category_name, 
+    SUM(oi.quantity * oi.unit_price) AS total_revenue
+FROM categories c
+JOIN products p 
+    ON c.category_id = p.category_id
+JOIN order_items oi 
+    ON p.product_id = oi.product_id
+GROUP BY c.category_name;
+
+--Q109. Query the 'customer_orders_view' to find all orders placed by customers from 'Delhi'.
+
+SELECT *
+FROM customer_orders_view
+WHERE full_name IN (
+	SELECT full_name
+	FROM customers
+	WHERE city = 'Delhi'
+);
+
+--Q110. Drop the view named 'product_sales_view'.
+
+DROP VIEW product_sales_view;
+
+
+--Q1. Insert 3 customers into the customers table with realistic data for all columns.
+
+INSERT INTO customers 
+(customer_id, full_name, email, phone, city, state, registration_date, gender)
+VALUES
+(31, 'Ritesh Malviya', 'ritesh.malviya@gmail.com', '9988776655', 'Bhopal', 'Madhya Pradesh', '2024-05-10', 'M'),
+(32, 'Komal Shah', 'komal.shah@gmail.com', '9876501234', 'Surat', 'Gujarat', '2024-05-12', 'F'),
+(33, 'Yash Thakur', 'yash.thakur@gmail.com', '9765432109', 'Nagpur', 'Maharashtra', '2024-05-15', 'M'); 
+
+--Q2. Insert 2 categories: 'Electronics' and 'Fashion' with NULL parent_category_id.
+-- Only insert if the category name doesn't already exist
+
+INSERT INTO categories (category_id, category_name, parent_category_id, description)
+SELECT 16, 'Electronics', NULL, 'Electronic gadgets and devices'
+WHERE NOT EXISTS (
+    SELECT 1 FROM categories WHERE category_name = 'Electronics'
+);
+
+INSERT INTO categories (category_id, category_name, parent_category_id, description)
+SELECT 17, 'Fashion', NULL, 'Clothing and accessories'
+WHERE NOT EXISTS (
+    SELECT 1 FROM categories WHERE category_name = 'Fashion'
+);
+
+-- Verify
+SELECT * FROM categories WHERE category_name IN ('Electronics', 'Fashion');
+
+
+
+
+--Q3. Insert 5 products with different categories, brands, prices, and stock quantities.
+
+INSERT INTO products (product_id, product_name, category_id, price, stock_quantity, brand, rating) VALUES
+(41, 'Samsung 4K Smart TV',      6,  85000.00, 40, 'Samsung',   4.6),
+(42, 'Woodland Casual Shoes',    11,  3499.00,  70, 'Woodland',  4.3),
+(43, 'Prestige Pressure Cooker', 12,  2299.00, 100, 'Prestige',  4.4),
+(44, 'Atomic Habits Book',       14,   499.00, 250, 'Penguin',   4.9),
+(45, 'Skipping Rope Pro',        15,   349.00, 300, 'Strauss',   4.2);
+
+SELECT * FROM products WHERE product_id IN (41, 42, 43, 44, 45);
+
+--Q4. Insert 3 orders for different customers with order_status as 'Pending', 'Shipped', and 'Delivered'.
+
+INSERT INTO orders (order_id, customer_id, order_date, delivery_date, order_status, shipping_address) VALUES
+(36, 28, '2024-05-05 10:00:00', NULL,         'Pending',   '33, Model Town, Ludhiana - 141001'),
+(37, 26, '2024-05-06 12:30:00', NULL,         'Shipped',   '22, Sector 62, Noida - 201301'),
+(38, 27, '2024-05-07 09:15:00', '2024-05-11', 'Delivered', '15, DLF Phase 2, Gurgaon - 122002');
+
+SELECT * FROM orders WHERE order_id IN (36, 37, 38);
+
+--Q5. Insert 4 order_items records for order_id = 1 with different products and quantities.
+INSERT INTO order_items (item_id, order_id, product_id, quantity, unit_price, discount) VALUES
+(71, 1, 20,  3,   350.00, 0.00),   -- Physics NCERT Class 12
+(72, 1, 24,  2,   899.00, 5.00),   -- Yoga Mat Anti-Slip
+(73, 1, 23,  1,  3500.00, 10.00),  -- Dumbbell Set 20kg
+(74, 1, 37,  4,   399.00, 0.00);   -- The Alchemist Novel
+
+SELECT * FROM order_items WHERE order_id = 1;
+
+
+--Q6. Insert 2 payment records with payment_status 'Success' and payment_method 'UPI' and 'Card'.
+
+INSERT INTO payments (payment_id, order_id, payment_date, amount, payment_method, payment_status) VALUES
+(31, 34, '2024-05-01 11:10:00', 33250.00, 'UPI',  'Success'),
+(32, 35, '2024-05-03 10:45:00', 28000.00, 'Card', 'Success');
+
+SELECT * FROM payments WHERE payment_id IN (31, 32);
+
+
+--Q7. Update the price of all products in category_id = 2 by increasing it by 15%.
+
+UPDATE products
+SET price = price * 1.15
+WHERE category_id = 2;
+--Q8. Update the order_status to 'Delivered' for all orders where order_status is 'Shipped' and order_date is before '2024-01-01'.
+
+UPDATE orders
+SET order_status = 'Delivered'
+WHERE order_status = 'Shipped'
+  AND order_date < '2024-01-01';
+
+--Q9. Update the stock_quantity of product_id = 5 by reducing it by 10 units.
+
+UPDATE products
+SET stock_quantity = stock_quantity - 10
+WHERE product_id = 5;
+
+--Q10. Update the email of customer_id = 3 to 'newemail@example.com'.
+
+SELECT customer_id, full_name, email AS email_before
+FROM customers WHERE customer_id = 3;
+
+UPDATE customers
+SET email = 'newemail@example.com'
+WHERE customer_id = 3;
+
+SELECT customer_id, full_name, email AS email_after
+FROM customers WHERE customer_id = 3;
+--Q11. Delete all orders where order_status = 'Cancelled' and order_date is before '2023-06-01'.
+
+DELETE FROM orders
+WHERE order_status = 'Cancelled'
+  AND order_date < '2023-06-01';
+
+--Q12. Delete all order_items where quantity is less than 1.
+
+DELETE FROM order_items
+WHERE quantity < 1;
+
+--Q13. Delete all products where stock_quantity is 0 and category_id = 5.
+
+DELETE FROM products
+WHERE stock_quantity = 0
+  AND category_id = 5;
+
+--Q14. Delete all payments where payment_status = 'Failed'.
+
+DELETE FROM payments
+WHERE payment_status = 'Failed';
+
+--Q15. Delete all customers who registered before '2020-01-01' and have made no orders.
+
+DELETE FROM customers
+WHERE registration_date < '2020-01-01'
+  AND customer_id NOT IN (SELECT DISTINCT customer_id FROM orders);
+
+-- Q16. Write a transaction that inserts a new order and commits it only if the customer_id exists in the customers table.
+
+BEGIN TRANSACTION;
+DECLARE @customer_id INT = 31; -- Example customer_id
+IF EXISTS (SELECT 1 FROM customers WHERE customer_id = @customer_id)
+	
+	BEGIN
+	INSERT INTO orders (order_id, customer_id, order_date, delivery_date, order_status, shipping_address)
+	VALUES (39, @customer_id, GETDATE(), NULL, 'Pending', '123 New Street, City - 123456');
+	COMMIT;
+END
+ELSE
+	BEGIN
+	ROLLBACK;
+END
+
+--Q17. Start a transaction, update the stock_quantity of product_id = 10 to 50, then rollback the transaction.
+
+BEGIN TRANSACTION;
+UPDATE products
+SET stock_quantity = 50
+WHERE product_id = 10;
+ROLLBACK;
+
+--Q18. Create a savepoint named 'before_delete', delete all orders with order_status = 'Cancelled', then rollback to the savepoint.
+
+BEGIN TRANSACTION;
+
+SAVE TRANSACTION before_delete;
+
+DELETE FROM orders
+WHERE order_status = 'Cancelled';
+
+ROLLBACK TRANSACTION before_delete;
+
+COMMIT;
+
+PRINT 'Rollback to savepoint executed successfully';
+
+--Q19. Write a transaction that transfers 500 coins from one customer to another (simulate wallet transfer). Use COMMIT if successful.
+
+IF COL_LENGTH('customers', 'wallet_coins') IS NULL
+BEGIN
+    ALTER TABLE customers
+    ADD wallet_coins INT DEFAULT 2000;
+END
+GO
+
+
+BEGIN TRANSACTION;
+
+BEGIN TRY
+
+    DECLARE @Sender INT = 1;      -- Aarav Sharma
+    DECLARE @Receiver INT = 2;    -- Priya Mehta
+    DECLARE @Amount INT = 500;
+
+    IF (SELECT wallet_coins FROM customers WHERE customer_id = @Sender) >= @Amount
+    BEGIN
+
+        UPDATE customers
+        SET wallet_coins = wallet_coins - @Amount
+        WHERE customer_id = @Sender;
+
+        UPDATE customers
+        SET wallet_coins = wallet_coins + @Amount
+        WHERE customer_id = @Receiver;
+
+        COMMIT;
+        PRINT 'Transaction Successful – 500 Coins Transferred';
+
+    END
+    ELSE
+    BEGIN
+        PRINT 'Insufficient Balance';
+        ROLLBACK;
+    END
+
+END TRY
+
+BEGIN CATCH
+    ROLLBACK;
+    PRINT 'Transaction Failed – Rolled Back';
+END CATCH;
+
+--Q20. Demonstrate the use of BEGIN, COMMIT, and ROLLBACK in a single transaction involving INSERT and UPDATE operations.
+BEGIN TRANSACTION;
+
+BEGIN TRY
+
+    INSERT INTO orders 
+    (order_id, customer_id, order_date, delivery_date, order_status, shipping_address)
+    VALUES
+    (36, 29, GETDATE(), NULL, 'Pending', 'Surat, Gujarat');
+
+    UPDATE products
+    SET stock_quantity = stock_quantity - 1
+    WHERE product_id = 1;
+
+    COMMIT;
+    PRINT 'Transaction Committed Successfully';
+
+END TRY
+
+BEGIN CATCH
+
+    ROLLBACK;
+    PRINT 'Transaction Rolled Back Due To Error';
+
+END CATCH;
+
+
+
+
+
+
+
+
+
+
