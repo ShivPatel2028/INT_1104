@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Management System</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .order {
+      background: white;
+      padding: 15px;
+      margin: 15px auto;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .order h2 {
+      margin: 0 0 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Order Management System</h1>
+<div id="app"></div>
+
+<script>
+const orders = [
+  {
+    id: 1,
+    items: [
+      { name: "Shirt", price: 500, quantity: 2 },
+      { name: "Shoes", price: 1000, quantity: 1 }
+    ]
+  },
+  {
+    id: 2,
+    items: [
+      { name: "Cap", price: 200, quantity: 3 },
+      { name: "Watch", price: 1500, quantity: 1 }
+    ]
+  }
+];
+
+// Process orders
+const processedOrders = orders.map(order => {
+  const totalAmount = order.items.reduce(
+    (sum, item) => sum + item.price * item.quantity, 0
+  );
+
+  const totalQuantity = order.items.reduce(
+    (sum, item) => sum + item.quantity, 0
+  );
+
+  return {
+    ...order,
+    totalAmount,
+    totalQuantity
+  };
+});
+
+// Render UI
+const app = document.getElementById("app");
+
+processedOrders.forEach(order => {
+  const div = document.createElement("div");
+  div.className = "order";
+
+  div.innerHTML = `
+    <h2>Order #${order.id}</h2>
+    <p><strong>Total Amount:</strong> ₹${order.totalAmount}</p>
+    <p><strong>Total Quantity:</strong> ${order.totalQuantity}</p>
+  `;
+
+  app.appendChild(div);
+});
+</script>
+
+</body>
+</html>
