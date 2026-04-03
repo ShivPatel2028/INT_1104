@@ -1,0 +1,37 @@
+// Retry API Call Function
+async function retryApiCall(callable, attempts = 3) {
+  try {
+    return await callable();
+  } catch (err) {
+    console.log(`Attempt failed. Remaining attempts: ${attempts - 1}`);
+    
+    if (attempts <= 1) {
+      throw err;
+    }
+
+    return retryApiCall(callable, attempts - 1);
+  }
+}
+
+function fakeApiCall() {
+  return new Promise((resolve, reject) => {
+    const success = Math.random() > 0.7;
+
+    setTimeout(() => {
+      if (success) {
+        resolve("✅ API Success!");
+      } else {
+        reject("❌ API Failed");
+      }
+    }, 500);
+  });
+}
+
+(async () => {
+  try {
+    const result = await retryApiCall(fakeApiCall, 5);
+    console.log("Final Result:", result);
+  } catch (error) {
+    console.error("Failed after retries:", error);
+  }
+})();

@@ -1,0 +1,14 @@
+
+
+function findDuplicates(arr) {
+    return [...new Set(arr.filter((item, i) => arr.indexOf(item) !== i))];
+}
+
+
+const arr = [1, 2, 2, 3, 4, 4, 5];
+
+
+const result = findDuplicates(arr);
+
+console.log("Input:", arr);
+console.log("Duplicates:", result);
